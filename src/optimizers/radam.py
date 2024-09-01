@@ -8,6 +8,22 @@ from .learning_rate import LearningRate
 
 
 class RAdam(Optimizer):
+    '''
+    Implements Riemannian Adam.
+
+    Attribute
+    ---------
+    batch_size (int):
+        batch size.
+    lr (LearningRate):
+        learning rate.
+    betas (tuple=(0.9,0.999)):
+        coefficients used for computing running averages of gradient and its square.
+    eps: (float=1e-8):
+        term added to the denominator to improve numerical stability.
+    amsgrad (bool=False):
+        whether to use the RAMSGrad variant of this algorithm.
+    '''
     def __init__(
             self,
             batch_size: int,
@@ -16,6 +32,14 @@ class RAdam(Optimizer):
             eps: float=1e-8,
             amsgrad: bool=False
         ) -> None:
+        if not 0.0 <= lr:
+            raise ValueError(f'Invalid learning rate: {lr}')
+        if not 0.0 <= eps:
+            raise ValueError(f'Invalid epsilon value: {eps}')
+        if not 0.0 <= betas[0] < 1.0:
+            raise ValueError(f'Invalid beta parameter at index 0: {betas[0]}')
+        if not 0.0 <= betas[1] < 1.0:
+            raise ValueError(f'Invalid beta parameter at index 1: {betas[1]}')
         super(RAdam, self).__init__(batch_size=batch_size, lr=lr)
         self.betas = betas
         self.eps = eps,
@@ -62,5 +86,4 @@ class RAdam(Optimizer):
                 grad_norm=np.linalg.norm(problem.full_grad(point)),
                 elapsed_time=end_time - start_time
             )
-        print(self.history)
         return self.history

@@ -8,6 +8,18 @@ from .learning_rate import LearningRate
 
 
 class RASA(Optimizer):
+    '''
+    Implements Riemannian Adaptive Stochastic Algorithm.
+
+    Attribute
+    ---------
+    batch_size (int):
+        batch size.
+    lr (LearningRate):
+        learning rate.
+    beta (float=0.99):
+        coefficients used for computing running averages of gradient.
+    '''
     def __init__(
             self,
             batch_size: int,
@@ -15,6 +27,10 @@ class RASA(Optimizer):
             beta: float=0.99,
             variant: str='LR'
         ) -> None:
+        if not 0.0 <= lr:
+            raise ValueError(f'Invalid learning rate: {lr}')
+        if not 0.0 <= beta < 1.0:
+            raise ValueError(f'Invalid beta parameter at index 0: {beta}')
         super(RASA, self).__init__(batch_size=batch_size, lr=lr)
         self.beta = beta
         self.variant = variant
@@ -61,5 +77,4 @@ class RASA(Optimizer):
                 grad_norm=np.linalg.norm(problem.full_grad(point)),
                 elapsed_time=end_time - start_time
             )
-        print(self.history)
         return self.history

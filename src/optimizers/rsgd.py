@@ -8,11 +8,23 @@ from .learning_rate import LearningRate
 
 
 class RSGD(Optimizer):
+    '''
+    Implements Riemannian Stochastic Grafient Descent.
+
+    Attribute
+    ---------
+    batch_size (int):
+        batch size.
+    lr (LearningRate):
+        learning rate.
+    '''
     def __init__(
             self,
             batch_size: int,
             lr: LearningRate
         ) -> None:
+        if not 0.0 <= lr:
+            raise ValueError(f'Invalid learning rate: {lr}')
         super(RSGD, self).__init__(batch_size=batch_size, lr=lr)
     
     def __repr__(self) -> str:
@@ -38,5 +50,4 @@ class RSGD(Optimizer):
                 grad_norm=np.linalg.norm(problem.full_grad(point)),
                 elapsed_time=end_time - start_time
             )
-        print(self.history)
         return self.history

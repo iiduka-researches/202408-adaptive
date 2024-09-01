@@ -3,6 +3,16 @@ from .learning_rate import LearningRate
 
 
 class Optimizer(ABC):
+    '''
+    Base class for all optimizers.
+
+    Attribute
+    ---------
+    batch_size (int):
+        batch size.
+    lr (LearningRate):
+        learning rate.
+    '''
     def __init__(self, batch_size: int, lr: LearningRate) -> None:
         self.lr = lr
         self.batch_size = batch_size
