@@ -32,8 +32,6 @@ class RAdam(Optimizer):
             eps: float=1e-8,
             amsgrad: bool=False
         ) -> None:
-        if not 0.0 <= lr:
-            raise ValueError(f'Invalid learning rate: {lr}')
         if not 0.0 <= eps:
             raise ValueError(f'Invalid epsilon value: {eps}')
         if not 0.0 <= betas[0] < 1.0:
@@ -77,7 +75,7 @@ class RAdam(Optimizer):
             exp_avg_sq = beta2 * exp_avg_sq + (1 - beta2) * grad * grad
             max_exp_avg_sq = np.maximum(max_exp_avg_sq, exp_avg_sq / bias_correction2)
             denom = np.sqrt(max_exp_avg_sq) + self.eps
-            d_p = -self.lr(k + 1) / np.sqrt(k + 1) * problem.manifold.projection(point, exp_avg / denom / bias_correction1)
+            d_p = -self.lr(k + 1) * problem.manifold.projection(point, exp_avg / denom / bias_correction1)
             point = problem.manifold.retraction(point, d_p)
             end_time = time()
 

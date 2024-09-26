@@ -23,8 +23,6 @@ class RSGD(Optimizer):
             batch_size: int,
             lr: LearningRate
         ) -> None:
-        if not 0.0 <= lr:
-            raise ValueError(f'Invalid learning rate: {lr}')
         super(RSGD, self).__init__(batch_size=batch_size, lr=lr)
     
     def __repr__(self) -> str:
@@ -41,7 +39,7 @@ class RSGD(Optimizer):
         for k in tqdm(range(max_iter)):
             start_time = time()
             grad = problem.minibatch_grad(point, self.batch_size)
-            d_p = -self.lr(k + 1) / np.sqrt(k + 1) * grad
+            d_p = -self.lr(k + 1) * grad
             point = problem.manifold.retraction(point, d_p)
             end_time = time()
 

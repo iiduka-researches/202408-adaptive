@@ -4,6 +4,8 @@ from abc import ABC, abstractmethod
 
 class LearningRate(ABC):
     def __init__(self, base_lr: float) -> None:
+        if not 0.0 <= base_lr:
+            raise ValueError(f'Invalid base learning rate: {base_lr}')
         self.base_lr = base_lr
 
     def __call__(self, k: int):

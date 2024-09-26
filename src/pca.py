@@ -68,7 +68,7 @@ if __name__ == '__main__':
         p: int = 100
     print(f'{(N, n, p)=}')
 
-    max_iter: int = 10
+    max_iter: int = 100
     batch_size: int = 2 ** 10
 
     base_lr: float = 1e-3

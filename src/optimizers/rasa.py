@@ -27,8 +27,6 @@ class RASA(Optimizer):
             beta: float=0.99,
             variant: str='LR'
         ) -> None:
-        if not 0.0 <= lr:
-            raise ValueError(f'Invalid learning rate: {lr}')
         if not 0.0 <= beta < 1.0:
             raise ValueError(f'Invalid beta parameter at index 0: {beta}')
         super(RASA, self).__init__(batch_size=batch_size, lr=lr)
@@ -68,7 +66,7 @@ class RASA(Optimizer):
                 max_exp_avg_right = np.maximum(max_exp_avg_right, exp_avg_right)
                 right_matrix = np.diag(max_exp_avg_right ** -0.25)
 
-            d_p = -self.lr(k + 1) / np.sqrt(k + 1) * problem.manifold.projection(point, left_matrix @ grad @ right_matrix)
+            d_p = -self.lr(k + 1) * problem.manifold.projection(point, left_matrix @ grad @ right_matrix)
             point = problem.manifold.retraction(point, d_p)
             end_time = time()
 
